@@ -3,7 +3,7 @@
 <br/>
 <h3>Wat heb je nodig:</h3>
 <p>- Raspberry Pi</p>
-<p>- (Compactibele) Camera module</p>
+<p>- (Compatibele) Camera module</p>
 <p>- PIR sensor</p>
 <p>- PN532</p>
 <p>- Jumper wires</p>
