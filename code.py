@@ -3,17 +3,20 @@ from picamera import PiCamera
 import time
 import cv2
 import numpy as np
+from Adafruit_PN532 import PN532_I2C
 
 # GPIO setup
 GPIO.setmode(GPIO.BCM)
 PIR_PIN = 17
-LED_PIN = 18
 
 GPIO.setup(PIR_PIN, GPIO.IN)
-GPIO.setup(LED_PIN, GPIO.OUT)
 
 # Camera setup
 camera = PiCamera()
+
+# PN532 setup
+pn532 = PN532_I2C(debug=False)
+pn532.SAM_configuration()
 
 # Function to recognize trash
 def recognize_trash(image):
@@ -28,6 +31,13 @@ def recognize_trash(image):
         if confidence > 0.5:  # confidence threshold
             label = int(detections[0, 0, i, 1])
             return label
+    return None
+
+# Function to read NFC tag
+def read_nfc():
+    uid = pn532.read_passive_target(timeout=0.5)
+    if uid is not None:
+        return ''.join([format(i, '02X') for i in uid])
     return None
 
 try:
@@ -45,17 +55,14 @@ try:
                 # Assign points based on trash type
                 points = 10  # Example, can be customized based on label
                 print(f'Points awarded: {points}')
-                
-                # Turn on LED
-                GPIO.output(LED_PIN, GPIO.HIGH)
-            else:
-                # Turn off LED
-                GPIO.output(LED_PIN, GPIO.LOW)
             
+            # Read NFC tag
+            nfc_id = read_nfc()
+            if nfc_id is not None:
+                print(f'NFC tag detected: {nfc_id}')
+                # Here you can implement points assignment to a user account based on the NFC tag
+
             time.sleep(5)  # Debounce time
-        else:
-            # Ensure LED is off when no motion is detected
-            GPIO.output(LED_PIN, GPIO.LOW)
 
 except KeyboardInterrupt:
     pass
