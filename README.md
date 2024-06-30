@@ -2,7 +2,7 @@
 <p>(Enkel te gebruiken door de eigenaar)</p>
 <br/>
 <h3>Wat heb je nodig:</h3>
-<p>- Raspberry Pi</p>
+<p>- Raspberry Pi (5)</p>
 <p>- (Compatibele) Camera module</p>
 <p>- PIR sensor</p>
 <p>- PN532</p>
